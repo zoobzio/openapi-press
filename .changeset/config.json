@@ -1,0 +1,21 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "zoobzio/openforge" }
+  ],
+  "commit": false,
+  "access": "public",
+  "baseBranch": "main",
+  "fixed": [
+    [
+      "@openforge/spec",
+      "@openforge/error",
+      "@openforge/call",
+      "@openforge/client"
+    ]
+  ],
+  "linked": [],
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}
