@@ -9,7 +9,7 @@ import {
 import { describe, expect, it } from "vitest";
 
 import { DEFAULT_RETRY } from "../src/constant";
-import { backoff, isTransient } from "../src/util";
+import { backoff, callKey, isTransient } from "../src/util";
 
 const init = { message: "x", method: "get", path: "/" };
 const httpInit = { ...init, status: 503, code: "HTTP_503" };
@@ -40,5 +40,14 @@ describe("backoff", () => {
     expect(backoff(policy, 1)).toBe(200);
     expect(backoff(policy, 2)).toBe(400);
     expect(backoff(policy, 3)).toBe(800);
+  });
+});
+
+describe("callKey", () => {
+  it("keys on the endpoint and the serialized args", () => {
+    const meta = { method: "get", path: "/users/{user_id}" };
+    expect(callKey(meta, ["u1"])).toBe('get /users/{user_id} ["u1"]');
+    expect(callKey(meta, ["u1"])).toBe(callKey(meta, ["u1"]));
+    expect(callKey(meta, ["u2"])).not.toBe(callKey(meta, ["u1"]));
   });
 });

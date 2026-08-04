@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   AbortError,
+  CircuitOpenError,
   ForgeError,
   HttpError,
   NetworkError,
@@ -77,6 +78,7 @@ describe("TransportError", () => {
     expect(new NetworkError(init)).toBeInstanceOf(TransportError);
     expect(new AbortError(init)).toBeInstanceOf(TransportError);
     expect(new TimeoutError(init)).toBeInstanceOf(TransportError);
+    expect(new CircuitOpenError(init)).toBeInstanceOf(TransportError);
     expect(new NetworkError(init)).toBeInstanceOf(ForgeError);
     expect(new NetworkError(init).name).toBe("NetworkError");
   });

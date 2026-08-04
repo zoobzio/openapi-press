@@ -38,7 +38,7 @@ export interface Call<A extends unknown[], R> {
   with(...wrappers: Wrapper[]): Call<A, R>;
 }
 
-/** Retry behavior. Overridden per field via `retry({ ... })`. */
+/** Retry behavior. Overridden per field via `withRetry({ ... })`. */
 export interface RetryPolicy {
   /** Maximum retries after the initial attempt. */
   attempts: number;
@@ -47,5 +47,21 @@ export interface RetryPolicy {
   /** HTTP methods eligible for retry (compared case-insensitively). */
   methods: string[];
   /** Whether a thrown error is worth retrying. */
+  on: (error: unknown, meta: CallMeta) => boolean;
+}
+
+/**
+ * Derives the identity of an invocation, for wrappers that group calls
+ * (dedupe, cache). Two invocations with the same key are the same call.
+ */
+export type CallKey = (meta: CallMeta, args: unknown[]) => string;
+
+/** Circuit-breaker behavior. Overridden per field via `withCircuitBreaker({ ... })`. */
+export interface CircuitBreakerPolicy {
+  /** Consecutive counted failures that open the circuit. */
+  failures: number;
+  /** How long an open circuit refuses calls before allowing a probe. */
+  cooldownMs: number;
+  /** Whether a thrown error counts toward opening the circuit. */
   on: (error: unknown, meta: CallMeta) => boolean;
 }

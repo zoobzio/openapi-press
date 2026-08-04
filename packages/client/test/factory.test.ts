@@ -1,4 +1,4 @@
-import { retry } from "@openforge/call";
+import { withRetry } from "@openforge/call";
 import type { Call } from "@openforge/call";
 import { NetworkError, NotFoundError, ServerError } from "@openforge/error";
 import { defineSpec } from "@openforge/spec";
@@ -135,7 +135,7 @@ describe("makeClient", () => {
       attempt < 3 ? jsonResponse(503, {}) : jsonResponse(200, []),
     );
     const client = build({ fetch });
-    const listWithRetry = client.users.list.with(retry({ backoffMs: 1 }));
+    const listWithRetry = client.users.list.with(withRetry({ backoffMs: 1 }));
     await expect(listWithRetry()).resolves.toEqual([]);
     expect(requests).toHaveLength(3);
   });
@@ -160,7 +160,7 @@ describe("makeClient", () => {
       },
     });
     await expect(
-      client.users.list.with(retry({ attempts: 1, backoffMs: 1 }))(),
+      client.users.list.with(withRetry({ attempts: 1, backoffMs: 1 }))(),
     ).rejects.toBeInstanceOf(ServerError);
     expect(events).toEqual([
       "req GET /users",

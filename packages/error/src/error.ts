@@ -127,6 +127,14 @@ export class AbortError extends TransportError {
   }
 }
 
+/** The call was refused by an open circuit breaker — no request was attempted. */
+export class CircuitOpenError extends TransportError {
+  constructor(init: ForgeErrorInit) {
+    super(init);
+    this.name = "CircuitOpenError";
+  }
+}
+
 /** The call exceeded a configured time budget. */
 export class TimeoutError extends TransportError {
   constructor(init: ForgeErrorInit) {

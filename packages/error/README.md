@@ -25,7 +25,8 @@ ForgeError
 └── TransportError
     ├── NetworkError          fetch failed
     ├── AbortError            caller cancelled
-    └── TimeoutError          time budget exceeded
+    ├── TimeoutError          time budget exceeded
+    └── CircuitOpenError      refused by an open circuit breaker
 ```
 
 Unmapped 4xx statuses resolve to plain `HttpError`; every 5xx resolves to
@@ -54,8 +55,8 @@ try {
 
 - `ForgeError` — the hierarchy root: `message` · `method` · `path` · `cause`.
 - `HttpError` and its status subclasses — add `status` · `code` · `body`.
-- `TransportError` / `NetworkError` / `AbortError` / `TimeoutError` — failures
-  without a response.
+- `TransportError` / `NetworkError` / `AbortError` / `TimeoutError` /
+  `CircuitOpenError` — failures without a response.
 - `errorFromResponse(method, path, response, body)` — builds the
   status-appropriate error from a non-2xx response.
 - `errorFromException(method, path, cause)` — folds a thrown fetch into

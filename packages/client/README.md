@@ -25,7 +25,7 @@ wins on conflict.
 ## Usage
 
 ```ts
-import { retry, timeout } from "@openforge/call";
+import { withRetry, withTimeout } from "@openforge/call";
 import { defineClient } from "@openforge/client";
 import type { ClientConfig } from "@openforge/client";
 import { defineSpec } from "@openforge/spec";
@@ -45,10 +45,11 @@ export const createClient = (config?: ClientConfig) => {
     config,
   );
   // The SDK author decides which endpoints carry which behavior.
+  const retry = withRetry();
   return {
     users: {
-      list: client.users.list.with(retry()),
-      get: client.users.get.with(retry(), timeout(5000)),
+      list: client.users.list.with(retry),
+      get: client.users.get.with(retry, withTimeout(5000)),
     },
   };
 };

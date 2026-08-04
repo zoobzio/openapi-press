@@ -5,7 +5,7 @@
 
 import { NetworkError, RateLimitError, ServerError } from "@openforge/error";
 
-import type { RetryPolicy } from "./types";
+import type { CallKey, RetryPolicy } from "./types";
 
 /**
  * Whether an error is worth retrying on its face: the server failed, asked
@@ -20,3 +20,11 @@ export const isTransient = (error: unknown): boolean =>
 /** Exponential backoff delay in ms for the Nth retry (1-based). */
 export const backoff = (policy: RetryPolicy, retry: number): number =>
   policy.backoffMs * 2 ** (retry - 1);
+
+/**
+ * The default {@link CallKey}: endpoint plus JSON-serialized args. Args that
+ * do not serialize meaningfully (signals, functions) collapse — pass a custom
+ * key to wrappers that group calls when that matters.
+ */
+export const callKey: CallKey = (meta, args) =>
+  `${meta.method} ${meta.path} ${JSON.stringify(args)}`;
