@@ -1,0 +1,38 @@
+{
+  "name": "openforge",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoobzio/openforge.git",
+    "directory": "packages/openforge"
+  },
+  "type": "module",
+  "main": "./.dist/index.mjs",
+  "types": "./.dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./.dist/index.d.ts",
+      "import": "./.dist/index.mjs"
+    },
+    "./error": {
+      "types": "./.dist/error.d.ts",
+      "import": "./.dist/error.mjs"
+    }
+  },
+  "files": [
+    ".dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "stub": "unbuild --stub",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@openforge/call": "workspace:*",
+    "@openforge/client": "workspace:*",
+    "@openforge/error": "workspace:*",
+    "@openforge/spec": "workspace:*"
+  }
+}

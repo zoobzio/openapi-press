@@ -9,6 +9,7 @@
   "baseBranch": "main",
   "fixed": [
     [
+      "openforge",
       "@openforge/spec",
       "@openforge/error",
       "@openforge/call",

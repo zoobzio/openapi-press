@@ -5,6 +5,7 @@ built with unbuild to its own `.dist`.
 
 | Package             | Purpose                                                                       |
 | ------------------- | ----------------------------------------------------------------------------- |
+| `openforge`         | Public umbrella — spec + call + client at the root, errors at `/error`        |
 | `@openforge/spec`   | Typed interactions with a generated OpenAPI `paths` type                      |
 | `@openforge/error`  | Granular, HTTP-aware error hierarchy shared by every layer                    |
 | `@openforge/call`   | Instrumented callables — the `.with` combinator and wrappers (retry, timeout) |

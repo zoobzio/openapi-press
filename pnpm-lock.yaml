@@ -74,6 +74,21 @@ importers:
 
   packages/error: {}
 
+  packages/openforge:
+    dependencies:
+      '@openforge/call':
+        specifier: workspace:*
+        version: link:../call
+      '@openforge/client':
+        specifier: workspace:*
+        version: link:../client
+      '@openforge/error':
+        specifier: workspace:*
+        version: link:../error
+      '@openforge/spec':
+        specifier: workspace:*
+        version: link:../spec
+
   packages/spec:
     dependencies:
       openapi-typescript-helpers:
