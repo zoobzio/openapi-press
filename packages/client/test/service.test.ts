@@ -1,9 +1,9 @@
-import { defineSpec, isOp } from "@openforge/spec";
-import type { Operation } from "@openforge/spec";
+import { defineSpec, isOp } from "@openapi-press/spec";
+import type { Operation } from "@openapi-press/spec";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
-import { defineClient, defineForge } from "../src/service";
-import type { CallOptions, ClientConfig, Forge } from "../src/types";
+import { defineClient, definePress } from "../src/service";
+import type { CallOptions, ClientConfig, Press } from "../src/types";
 import { jsonResponse, makeFetch } from "./fixture";
 import type { User, paths } from "./fixture";
 
@@ -51,17 +51,17 @@ describe("defineClient", () => {
   });
 });
 
-describe("defineForge", () => {
-  const forge = defineForge<paths>();
-  const createApi = forge.client({
+describe("definePress", () => {
+  const press = definePress<paths>();
+  const createApi = press.client({
     users: {
-      list: forge.op("get", "/users"),
-      get: forge.op("get", "/users/{user_id}"),
+      list: press.op("get", "/users"),
+      get: press.op("get", "/users/{user_id}"),
     },
   });
 
   it("produces spec-checked descriptors through op", () => {
-    expect(isOp(forge.op("get", "/users"))).toBe(true);
+    expect(isOp(press.op("get", "/users"))).toBe(true);
   });
 
   it("captures a tree into a config-accepting factory", async () => {
@@ -85,10 +85,10 @@ describe("defineForge", () => {
     expect(b.requests[0]?.url).toBe("https://b.test/users");
   });
 
-  it("types the factory as a Forge over the bound tree", () => {
+  it("types the factory as a Press over the bound tree", () => {
     expectTypeOf(createApi).parameters.toEqualTypeOf<[config?: ClientConfig]>();
     expectTypeOf(createApi).toMatchTypeOf<
-      Forge<ReturnType<typeof createApi>>
+      Press<ReturnType<typeof createApi>>
     >();
     const api = createApi();
     expectTypeOf(api.users.list).returns.toEqualTypeOf<Promise<User[]>>();

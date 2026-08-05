@@ -3,4 +3,4 @@
  * both runtime-config planes (private hosts, public prefixes).
  */
 
-export const KEY = "openforge";
+export const KEY = "press";

@@ -4,4 +4,4 @@
  * objects, so structure alone cannot tell them apart.
  */
 
-export const OP_BRAND: unique symbol = Symbol("openforge.op");
+export const OP_BRAND: unique symbol = Symbol("openapi-press.op");

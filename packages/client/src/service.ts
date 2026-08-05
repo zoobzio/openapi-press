@@ -1,15 +1,15 @@
 /**
  * The typed front doors. `defineClient<paths>()` yields a `build` that turns
- * a namespace tree of descriptors into a live client. `defineForge<paths>()`
+ * a namespace tree of descriptors into a live client. `definePress<paths>()`
  * is the full authoring kit: `op` for descriptors and `client` to capture a
- * tree into a {@link Forge} — the config-accepting client factory that is the
+ * tree into a {@link Press} — the config-accepting client factory that is the
  * unit integrations consume.
  */
 
-import { defineSpec } from "@openforge/spec";
+import { defineSpec } from "@openapi-press/spec";
 
 import { makeClient } from "./factory";
-import type { Bound, ClientBuilder, ForgeBuilder } from "./types";
+import type { Bound, ClientBuilder, PressBuilder } from "./types";
 
 /** Binds a generated `paths` type and returns its client builder. */
 export const defineClient = <Paths extends object>(): ClientBuilder<Paths> => ({
@@ -18,7 +18,7 @@ export const defineClient = <Paths extends object>(): ClientBuilder<Paths> => ({
 });
 
 /** Binds a generated `paths` type and returns its authoring kit. */
-export const defineForge = <Paths extends object>(): ForgeBuilder<Paths> => {
+export const definePress = <Paths extends object>(): PressBuilder<Paths> => {
   const { op } = defineSpec<Paths>();
   const { build } = defineClient<Paths>();
   return {

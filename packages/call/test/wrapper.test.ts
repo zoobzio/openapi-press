@@ -5,7 +5,7 @@ import {
   ServerError,
   TimeoutError,
   UnauthorizedError,
-} from "@openforge/error";
+} from "@openapi-press/error";
 import { describe, expect, it } from "vitest";
 
 import { defineCall } from "../src/service";

@@ -1,10 +1,10 @@
-# @openforge/error
+# @openapi-press/error
 
-The granular, HTTP-aware error system shared by every openforge layer.
+The granular, HTTP-aware error system shared by every openapi-press layer.
 
 ## The error model
 
-Everything an openforge client throws extends `ForgeError`, which splits into
+Everything an openapi-press client throws extends `PressError`, which splits into
 two families. `HttpError` covers responses the server actually sent: each
 common status gets its own class, so consumers branch with
 `instanceof NotFoundError` rather than `status === 404`, while `code` and
@@ -12,7 +12,7 @@ common status gets its own class, so consumers branch with
 requests that never completed — no response, so no status.
 
 ```
-ForgeError
+PressError
 ├── HttpError                 status · code · body
 │   ├── BadRequestError       400
 │   ├── UnauthorizedError     401
@@ -39,7 +39,7 @@ import {
   NotFoundError,
   RateLimitError,
   TransportError,
-} from "@openforge/error";
+} from "@openapi-press/error";
 
 try {
   const user = await client.users.get("user-123");
@@ -53,7 +53,7 @@ try {
 
 ## API
 
-- `ForgeError` — the hierarchy root: `message` · `method` · `path` · `cause`.
+- `PressError` — the hierarchy root: `message` · `method` · `path` · `cause`.
 - `HttpError` and its status subclasses — add `status` · `code` · `body`.
 - `TransportError` / `NetworkError` / `AbortError` / `TimeoutError` /
   `CircuitOpenError` — failures without a response.

@@ -1,4 +1,4 @@
-import type { OpDescriptor, Operation } from "@openforge/spec";
+import type { OpDescriptor, Operation } from "@openapi-press/spec";
 import { describe, expectTypeOf, it } from "vitest";
 
 import type {

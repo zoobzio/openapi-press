@@ -16,7 +16,7 @@ import {
   CircuitOpenError,
   TimeoutError,
   UnauthorizedError,
-} from "@openforge/error";
+} from "@openapi-press/error";
 
 import { DEFAULT_CIRCUIT_BREAKER, DEFAULT_RETRY } from "./constant";
 import type {

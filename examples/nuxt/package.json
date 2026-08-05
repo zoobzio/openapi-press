@@ -1,5 +1,5 @@
 {
-  "name": "@openforge/example-nuxt",
+  "name": "@openapi-press/example-nuxt",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,9 +10,9 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@openforge/nuxt": "workspace:*",
+    "@openapi-press/nuxt": "workspace:*",
     "nuxt": "^4.4.6",
-    "openforge": "workspace:*"
+    "openapi-press": "workspace:*"
   },
   "devDependencies": {
     "vue-tsc": "^3.3.5"

@@ -1,10 +1,10 @@
 {
-  "name": "@openforge/client",
+  "name": "@openapi-press/client",
   "version": "0.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoobzio/openforge.git",
+    "url": "git+https://github.com/zoobzio/openapi-press.git",
     "directory": "packages/client"
   },
   "type": "module",
@@ -27,9 +27,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@openforge/call": "workspace:*",
-    "@openforge/error": "workspace:*",
-    "@openforge/spec": "workspace:*",
+    "@openapi-press/call": "workspace:*",
+    "@openapi-press/error": "workspace:*",
+    "@openapi-press/spec": "workspace:*",
     "openapi-fetch": "^0.14.0",
     "openapi-typescript-helpers": "^0.1.0"
   }

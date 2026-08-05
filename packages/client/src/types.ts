@@ -5,11 +5,11 @@
  * call-signature composition that turns spec descriptors into typed
  * {@link Call}s. Behavior — retry, timeouts, and whatever else — is not
  * configured here: endpoints are instrumented through their `.with`
- * combinator from `@openforge/call`.
+ * combinator from `@openapi-press/call`.
  */
 
-import type { Call } from "@openforge/call";
-import type { ForgeError } from "@openforge/error";
+import type { Call } from "@openapi-press/call";
+import type { PressError } from "@openapi-press/error";
 import type {
   OpData,
   OpDescriptor,
@@ -19,7 +19,7 @@ import type {
   PathParamNames,
   PathParamObject,
   SpecBuilder,
-} from "@openforge/spec";
+} from "@openapi-press/spec";
 import type { HttpMethod, RequiredKeysOf } from "openapi-typescript-helpers";
 
 /** Structured logger. All fields are optional metadata bags. */
@@ -44,7 +44,7 @@ export interface ResponseHookContext extends RequestHookContext {
 export interface ErrorHookContext {
   method: string;
   path: string;
-  error: ForgeError;
+  error: PressError;
 }
 
 /**
@@ -69,11 +69,11 @@ export interface ClientConfig {
   /** Structured logger. Defaults to a no-op. */
   logger?: Logger;
   /**
-   * Maps a ForgeError to the value that should actually be thrown (a rethrow
+   * Maps a PressError to the value that should actually be thrown (a rethrow
    * hook). Return a replacement error to throw it; return `undefined` to throw
-   * the original ForgeError; throw from within to raise your own.
+   * the original PressError; throw from within to raise your own.
    */
-  mapError?: (error: ForgeError) => unknown;
+  mapError?: (error: PressError) => unknown;
   /** Observability hooks. */
   hooks?: Hooks;
 }
@@ -105,7 +105,7 @@ export type OptionsArg<Op> =
 /**
  * The instrumented callable a descriptor becomes: positional path params
  * derived from the path template, then a trailing options object, returning
- * the success payload directly (errors are thrown from the `@openforge/error`
+ * the success payload directly (errors are thrown from the `@openapi-press/error`
  * hierarchy). As a {@link Call}, it carries `.with` for wrapping.
  */
 export type BoundMethod<Paths, M extends HttpMethod, P extends string> =
@@ -150,12 +150,12 @@ export interface ClientBuilder<Paths extends object> {
  * author exports and an integration consumes — the integration supplies the
  * environment-appropriate config; the factory owns everything else.
  */
-export type Forge<T> = (config?: ClientConfig) => T;
+export type Press<T> = (config?: ClientConfig) => T;
 
-/** The spec-bound authoring kit produced by {@link defineForge}. */
-export interface ForgeBuilder<Paths extends object> {
+/** The spec-bound authoring kit produced by {@link definePress}. */
+export interface PressBuilder<Paths extends object> {
   /** Spec-checked descriptor factory (see `defineSpec`). */
   op: SpecBuilder<Paths>["op"];
-  /** Captures a namespace tree into a {@link Forge}. */
-  client<Tree extends object>(tree: Tree): Forge<Bound<Paths, Tree>>;
+  /** Captures a namespace tree into a {@link Press}. */
+  client<Tree extends object>(tree: Tree): Press<Bound<Paths, Tree>>;
 }

@@ -3,7 +3,11 @@
  * consumers can reuse them in their own wrappers and policies.
  */
 
-import { NetworkError, RateLimitError, ServerError } from "@openforge/error";
+import {
+  NetworkError,
+  RateLimitError,
+  ServerError,
+} from "@openapi-press/error";
 
 import type { CallKey, RetryPolicy } from "./types";
 

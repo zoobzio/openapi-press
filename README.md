@@ -1,4 +1,4 @@
-# openforge
+# openapi-press
 
 A client-creation utility for resource-namespaced SDKs.
 
@@ -16,19 +16,19 @@ combinator; nothing is instrumented by default.
 ## Quick start
 
 ```sh
-npm install openforge
+npm install openapi-press
 npx openapi-typescript ./openapi.yaml -o ./schema.gen.ts
 ```
 
-Describe the API once and export a **Forge** — a config-accepting client
+Describe the API once and export a **Press** — a config-accepting client
 factory. The SDK owns the shape; whoever consumes it supplies the config:
 
 ```ts
 // api.ts
-import { defineForge } from "openforge";
+import { definePress } from "openapi-press";
 import type { paths } from "./schema.gen";
 
-const { op, client } = defineForge<paths>();
+const { op, client } = definePress<paths>();
 
 // Descriptors are checked against the spec: the path must exist and
 // carry the method.
@@ -43,7 +43,7 @@ export const createApi = client({
 Build it and call it — signatures are derived from the spec:
 
 ```ts
-import { NotFoundError } from "openforge/error";
+import { NotFoundError } from "openapi-press/error";
 import { createApi } from "./api";
 
 const api = createApi({ baseUrl: "https://api.example.com" });
@@ -62,34 +62,34 @@ try {
 Endpoints that need behavior get it explicitly, through `.with`:
 
 ```ts
-import { withRetry, withTimeout } from "openforge";
+import { withRetry, withTimeout } from "openapi-press";
 
 const retry = withRetry();
 const getUser = api.users.get.with(retry, withTimeout(5000));
 ```
 
 Wrappers compose positionally and extending the vocabulary is just writing a
-function — see [`@openforge/call`](packages/call/README.md).
+function — see [`@openapi-press/call`](packages/call/README.md).
 
 ## Packages
 
-The `openforge` umbrella re-exports the layers below; depend on it and the
+The `openapi-press` umbrella re-exports the layers below; depend on it and the
 decomposition stays an implementation detail. Each package documents its own
 layer in depth.
 
-| Package                                          | Purpose                                                                       |
-| ------------------------------------------------ | ----------------------------------------------------------------------------- |
-| [`openforge`](packages/openforge/README.md)      | Public umbrella — spec + call + client at the root, errors at `/error`        |
-| [`@openforge/spec`](packages/spec/README.md)     | Typed interactions with a generated OpenAPI `paths` type                      |
-| [`@openforge/error`](packages/error/README.md)   | Granular, HTTP-aware error hierarchy shared by every layer                    |
-| [`@openforge/call`](packages/call/README.md)     | Instrumented callables — the `.with` combinator and wrappers (retry, timeout) |
-| [`@openforge/client`](packages/client/README.md) | Wiring layer turning spec descriptors into live, typed API clients            |
+| Package                                              | Purpose                                                                       |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [`openapi-press`](packages/openapi-press/README.md)  | Public umbrella — spec + call + client at the root, errors at `/error`        |
+| [`@openapi-press/spec`](packages/spec/README.md)     | Typed interactions with a generated OpenAPI `paths` type                      |
+| [`@openapi-press/error`](packages/error/README.md)   | Granular, HTTP-aware error hierarchy shared by every layer                    |
+| [`@openapi-press/call`](packages/call/README.md)     | Instrumented callables — the `.with` combinator and wrappers (retry, timeout) |
+| [`@openapi-press/client`](packages/client/README.md) | Wiring layer turning spec descriptors into live, typed API clients            |
 
 ### Integrations
 
-| Package                                          | Purpose                                                             |
-| ------------------------------------------------ | ------------------------------------------------------------------- |
-| [`@openforge/nuxt`](integrations/nuxt/README.md) | SSR-aware `useForge` composable and a per-client API proxy for Nuxt |
+| Package                                              | Purpose                                                             |
+| ---------------------------------------------------- | ------------------------------------------------------------------- |
+| [`@openapi-press/nuxt`](integrations/nuxt/README.md) | SSR-aware `usePress` composable and a per-client API proxy for Nuxt |
 
 The Nuxt module registers Forges from `nuxt.config` and builds them with
 environment-appropriate config: SSR calls the upstream host directly (with

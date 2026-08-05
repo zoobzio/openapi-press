@@ -1,11 +1,11 @@
 {
-  "name": "openforge",
+  "name": "openapi-press",
   "version": "0.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoobzio/openforge.git",
-    "directory": "packages/openforge"
+    "url": "git+https://github.com/zoobzio/openapi-press.git",
+    "directory": "packages/openapi-press"
   },
   "type": "module",
   "main": "./.dist/index.mjs",
@@ -31,9 +31,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@openforge/call": "workspace:*",
-    "@openforge/client": "workspace:*",
-    "@openforge/error": "workspace:*",
-    "@openforge/spec": "workspace:*"
+    "@openapi-press/call": "workspace:*",
+    "@openapi-press/client": "workspace:*",
+    "@openapi-press/error": "workspace:*",
+    "@openapi-press/spec": "workspace:*"
   }
 }

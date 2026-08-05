@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { NotFoundError } from "openforge/error";
+import { NotFoundError } from "openapi-press/error";
 
 /*
- * The registered client, fully typed from the Forge in shared/api.ts, with
+ * The registered client, fully typed from the Press in shared/api.ts, with
  * app wiring supplied at the call site. On the server this render calls the
  * upstream host directly; in the browser the same calls route through the
  * /api/core proxy.
  */
 const log = (message: string, meta?: Record<string, unknown>) => {
-  console.log(`[forge] ${message}`, meta ?? "");
+  console.log(`[press] ${message}`, meta ?? "");
 };
-const api = useForge("api", {
+const api = usePress("api", {
   logger: { debug: log, info: log, warn: log, error: log },
 });
 
@@ -22,7 +22,7 @@ const { data: featured } = await useAsyncData("featured", () =>
   api.users.get("u1"),
 );
 
-/* Errors throw from the openforge hierarchy — branch on class, not status. */
+/* Errors throw from the openapi-press hierarchy — branch on class, not status. */
 const { data: missing } = await useAsyncData("missing", () =>
   api.users.get("nope").catch((error: unknown) => {
     if (error instanceof NotFoundError) return null;
@@ -33,7 +33,7 @@ const { data: missing } = await useAsyncData("missing", () =>
 
 <template>
   <main>
-    <h1>openforge × nuxt</h1>
+    <h1>openapi-press × nuxt</h1>
 
     <section>
       <h2>users.list()</h2>

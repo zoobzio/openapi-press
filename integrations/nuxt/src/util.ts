@@ -4,7 +4,7 @@
  * right upstream. Kept free of Nuxt so it is testable as plain functions.
  */
 
-import type { ForgeClientConfig, MatchedClient } from "./types";
+import type { PressClientConfig, MatchedClient } from "./types";
 
 /** Strips trailing slashes so host + path concatenation is unambiguous. */
 export const normalizeHost = (host: string): string => host.replace(/\/+$/, "");
@@ -18,23 +18,23 @@ export const normalizePrefix = (prefix: string): string =>
  * http(s) origins, prefixes must be rooted paths.
  */
 export const normalizeClients = (
-  clients: Record<string, ForgeClientConfig>,
-): Record<string, ForgeClientConfig> => {
-  const out: Record<string, ForgeClientConfig> = {};
+  clients: Record<string, PressClientConfig>,
+): Record<string, PressClientConfig> => {
+  const out: Record<string, PressClientConfig> = {};
   for (const [name, client] of Object.entries(clients)) {
     if (typeof client.client !== "string" || client.client.length === 0) {
       throw new Error(
-        `openforge: client "${name}" must point at a module whose default export is its Forge.`,
+        `openapi-press: client "${name}" must point at a module whose default export is its Press.`,
       );
     }
     if (!/^https?:\/\//.test(client.host)) {
       throw new Error(
-        `openforge: client "${name}" host must be an absolute http(s) URL.`,
+        `openapi-press: client "${name}" host must be an absolute http(s) URL.`,
       );
     }
     if (!client.prefix.startsWith("/")) {
       throw new Error(
-        `openforge: client "${name}" prefix must start with "/".`,
+        `openapi-press: client "${name}" prefix must start with "/".`,
       );
     }
     out[name] = {

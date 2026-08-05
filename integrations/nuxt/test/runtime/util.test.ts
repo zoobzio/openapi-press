@@ -1,4 +1,4 @@
-import type { ClientConfig } from "openforge";
+import type { ClientConfig } from "openapi-press";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { mergeConfig, resolveConfig } from "../../src/runtime/util";
@@ -6,7 +6,7 @@ import { useRequestHeaders, useRuntimeConfig } from "../stubs/imports";
 
 /** Flip the build-time `import.meta.server` flag the config resolution branches on. */
 const asServer = (server: boolean): void => {
-  (globalThis as Record<string, unknown>).__openforgeServer__ = server;
+  (globalThis as Record<string, unknown>).__pressServer__ = server;
 };
 
 beforeEach(() => {
@@ -18,14 +18,14 @@ beforeEach(() => {
 describe("resolveConfig", () => {
   it("throws when the named client is not configured", () => {
     useRuntimeConfig.mockReturnValue({
-      public: { openforge: { clients: {} } },
+      public: { press: { clients: {} } },
     });
     expect(() => resolveConfig("api")).toThrow(/no client named "api"/);
   });
 
   it("resolves the proxy prefix as the baseUrl on the client", () => {
     useRuntimeConfig.mockReturnValue({
-      public: { openforge: { clients: { api: { prefix: "/api/core" } } } },
+      public: { press: { clients: { api: { prefix: "/api/core" } } } },
     });
     expect(resolveConfig("api")).toEqual({ baseUrl: "/api/core" });
   });
@@ -37,16 +37,16 @@ describe("resolveConfig", () => {
 
     it("throws when the client has no upstream host", () => {
       useRuntimeConfig.mockReturnValue({
-        public: { openforge: { clients: { api: { prefix: "/api/core" } } } },
-        openforge: { clients: {} },
+        public: { press: { clients: { api: { prefix: "/api/core" } } } },
+        press: { clients: {} },
       });
       expect(() => resolveConfig("api")).toThrow(/no upstream host/);
     });
 
     it("points at the host and forwards the caller's credentials", () => {
       useRuntimeConfig.mockReturnValue({
-        public: { openforge: { clients: { api: { prefix: "/api/core" } } } },
-        openforge: { clients: { api: { host: "https://api.internal" } } },
+        public: { press: { clients: { api: { prefix: "/api/core" } } } },
+        press: { clients: { api: { host: "https://api.internal" } } },
       });
       useRequestHeaders.mockReturnValue({
         cookie: "sid=1",
@@ -60,8 +60,8 @@ describe("resolveConfig", () => {
 
     it("drops forwarded headers the request did not carry", () => {
       useRuntimeConfig.mockReturnValue({
-        public: { openforge: { clients: { api: { prefix: "/api/core" } } } },
-        openforge: { clients: { api: { host: "https://api.internal" } } },
+        public: { press: { clients: { api: { prefix: "/api/core" } } } },
+        press: { clients: { api: { host: "https://api.internal" } } },
       });
       useRequestHeaders.mockReturnValue({
         cookie: "sid=1",

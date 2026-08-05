@@ -28,21 +28,21 @@ describe("proxy handler", () => {
   it("404s when no client is mounted at the request path", () => {
     // No public plane at all: the handler falls back to an empty registry.
     useRuntimeConfig.mockReturnValue({ public: {} });
-    expect(() => invoke(event)).toThrow(/No openforge client mounted/);
+    expect(() => invoke(event)).toThrow(/No openapi-press client mounted/);
   });
 
   it("502s when the matched client has no upstream host", () => {
     useRuntimeConfig.mockReturnValue({
-      public: { openforge: { clients: { api: { prefix: "/api/core" } } } },
-      openforge: { clients: {} },
+      public: { press: { clients: { api: { prefix: "/api/core" } } } },
+      press: { clients: {} },
     });
     expect(() => invoke(event)).toThrow(/No upstream host/);
   });
 
   it("forwards to host + path-minus-prefix, passing the event through", () => {
     useRuntimeConfig.mockReturnValue({
-      public: { openforge: { clients: { api: { prefix: "/api/core" } } } },
-      openforge: { clients: { api: { host: "https://api.internal" } } },
+      public: { press: { clients: { api: { prefix: "/api/core" } } } },
+      press: { clients: { api: { host: "https://api.internal" } } },
     });
 
     const result = invoke(event);
@@ -58,14 +58,14 @@ describe("proxy handler", () => {
   it("routes to the longest matching prefix when clients nest", () => {
     useRuntimeConfig.mockReturnValue({
       public: {
-        openforge: {
+        press: {
           clients: {
             api: { prefix: "/api" },
             core: { prefix: "/api/core" },
           },
         },
       },
-      openforge: {
+      press: {
         clients: {
           api: { host: "https://api.internal" },
           core: { host: "https://core.internal" },

@@ -1,10 +1,10 @@
 {
-  "name": "@openforge/spec",
+  "name": "@openapi-press/spec",
   "version": "0.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoobzio/openforge.git",
+    "url": "git+https://github.com/zoobzio/openapi-press.git",
     "directory": "packages/spec"
   },
   "type": "module",

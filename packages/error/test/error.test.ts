@@ -6,7 +6,7 @@ import {
   CircuitOpenError,
   ConflictError,
   ForbiddenError,
-  ForgeError,
+  PressError,
   HttpError,
   NetworkError,
   NotFoundError,
@@ -18,15 +18,15 @@ import {
   UnprocessableError,
 } from "../src/error";
 
-describe("ForgeError", () => {
+describe("PressError", () => {
   it("carries the request context", () => {
-    const error = new ForgeError({
+    const error = new PressError({
       message: "boom",
       method: "get",
       path: "/users/{user_id}",
     });
     expect(error).toBeInstanceOf(Error);
-    expect(error.name).toBe("ForgeError");
+    expect(error.name).toBe("PressError");
     expect(error.message).toBe("boom");
     expect(error.method).toBe("get");
     expect(error.path).toBe("/users/{user_id}");
@@ -34,7 +34,7 @@ describe("ForgeError", () => {
 
   it("propagates the cause when given one", () => {
     const cause = new TypeError("fetch failed");
-    const error = new ForgeError({
+    const error = new PressError({
       message: "boom",
       method: "get",
       path: "/",
@@ -54,7 +54,7 @@ describe("HttpError", () => {
       method: "get",
       path: "/",
     });
-    expect(error).toBeInstanceOf(ForgeError);
+    expect(error).toBeInstanceOf(PressError);
     expect(error.name).toBe("HttpError");
     expect(error.status).toBe(418);
     expect(error.code).toBe("TEAPOT");
@@ -72,7 +72,7 @@ describe("HttpError", () => {
     const error = new NotFoundError(init);
     expect(error).toBeInstanceOf(NotFoundError);
     expect(error).toBeInstanceOf(HttpError);
-    expect(error).toBeInstanceOf(ForgeError);
+    expect(error).toBeInstanceOf(PressError);
     expect(error.name).toBe("NotFoundError");
     expect(new ServerError({ ...init, status: 503 })).toBeInstanceOf(HttpError);
   });
@@ -85,7 +85,7 @@ describe("TransportError", () => {
     expect(new AbortError(init)).toBeInstanceOf(TransportError);
     expect(new TimeoutError(init)).toBeInstanceOf(TransportError);
     expect(new CircuitOpenError(init)).toBeInstanceOf(TransportError);
-    expect(new NetworkError(init)).toBeInstanceOf(ForgeError);
+    expect(new NetworkError(init)).toBeInstanceOf(PressError);
     expect(new NetworkError(init).name).toBe("NetworkError");
   });
 
@@ -119,7 +119,7 @@ describe("every status-specific HttpError subclass", () => {
   ] as const)("names itself and extends HttpError (%s)", (Cls, name) => {
     const error = new Cls(init);
     expect(error).toBeInstanceOf(HttpError);
-    expect(error).toBeInstanceOf(ForgeError);
+    expect(error).toBeInstanceOf(PressError);
     expect(error.name).toBe(name);
   });
 });
@@ -134,7 +134,7 @@ describe("every TransportError subclass", () => {
   ] as const)("names itself and extends TransportError (%s)", (Cls, name) => {
     const error = new Cls(init);
     expect(error).toBeInstanceOf(TransportError);
-    expect(error).toBeInstanceOf(ForgeError);
+    expect(error).toBeInstanceOf(PressError);
     expect(error.name).toBe(name);
   });
 });

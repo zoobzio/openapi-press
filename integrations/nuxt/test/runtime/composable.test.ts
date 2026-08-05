@@ -1,4 +1,4 @@
-import type { ClientConfig } from "openforge";
+import type { ClientConfig } from "openapi-press";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("../../src/runtime/util", () => ({
@@ -9,14 +9,14 @@ vi.mock("../../src/runtime/util", () => ({
   })),
 }));
 
-import { useForge } from "../../src/runtime/composable";
+import { usePress } from "../../src/runtime/composable";
 import { mergeConfig, resolveConfig } from "../../src/runtime/util";
-import { clients } from "../stubs/build-openforge";
+import { clients } from "../stubs/build-openapi-press";
 
 // The generated manifest declares the registered names; stand one in so the
 // composable's `name` argument and return type resolve.
-declare module "#build/types/openforge" {
-  interface ForgeClients {
+declare module "#build/types/openapi-press" {
+  interface PressClients {
     api: { list: () => void };
   }
 }
@@ -29,7 +29,7 @@ beforeEach(() => {
   vi.mocked(mergeConfig).mockClear();
 });
 
-describe("useForge", () => {
+describe("usePress", () => {
   it("builds the named client from resolved config under caller wiring", () => {
     const factory = vi.fn(() => built);
     clients.api = factory;
@@ -42,7 +42,7 @@ describe("useForge", () => {
       },
     };
 
-    const client = useForge("api", config);
+    const client = usePress("api", config);
 
     expect(resolveConfig).toHaveBeenCalledWith("api");
     expect(mergeConfig).toHaveBeenCalledWith({ baseUrl: "/api/core" }, config);
@@ -53,7 +53,7 @@ describe("useForge", () => {
   it("defaults the caller config to an empty object", () => {
     clients.api = vi.fn(() => built);
 
-    useForge("api");
+    usePress("api");
 
     expect(mergeConfig).toHaveBeenCalledWith({ baseUrl: "/api/core" }, {});
   });

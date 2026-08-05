@@ -5,8 +5,8 @@
  * host. The browser only ever sees the prefix.
  */
 
-import { KEY } from "@openforge/nuxt/constant";
-import { matchClient, proxyTarget } from "@openforge/nuxt/util";
+import { KEY } from "@openapi-press/nuxt/constant";
+import { matchClient, proxyTarget } from "@openapi-press/nuxt/util";
 import { createError, defineEventHandler, proxyRequest } from "h3";
 
 import { useRuntimeConfig } from "#imports";
@@ -17,14 +17,14 @@ export default defineEventHandler((event) => {
   if (matched === null) {
     throw createError({
       statusCode: 404,
-      statusMessage: "No openforge client mounted at this path",
+      statusMessage: "No openapi-press client mounted at this path",
     });
   }
   const host = config[KEY]?.clients?.[matched.name]?.host;
   if (host === undefined) {
     throw createError({
       statusCode: 502,
-      statusMessage: `No upstream host configured for openforge client "${matched.name}"`,
+      statusMessage: `No upstream host configured for openapi-press client "${matched.name}"`,
     });
   }
   return proxyRequest(event, proxyTarget(host, matched.prefix, event.path));

@@ -5,8 +5,8 @@
 
 import type { HttpError } from "./error";
 
-/** Fields carried by every {@link ForgeError}. */
-export interface ForgeErrorInit {
+/** Fields carried by every {@link PressError}. */
+export interface PressErrorInit {
   /** Human-readable message. */
   message: string;
   /** HTTP method of the originating request. */
@@ -18,7 +18,7 @@ export interface ForgeErrorInit {
 }
 
 /** Fields carried by every {@link HttpError}. */
-export interface HttpErrorInit extends ForgeErrorInit {
+export interface HttpErrorInit extends PressErrorInit {
   /** HTTP status code of the response. */
   status: number;
   /** Machine-readable code: the API's error code, or a synthetic fallback. */

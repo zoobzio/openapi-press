@@ -1,31 +1,31 @@
 /**
- * The error hierarchy every openforge client throws. Two families under one
+ * The error hierarchy every openapi-press client throws. Two families under one
  * root: {@link HttpError} for responses the server actually sent (with the
  * status-specific subclasses a consumer branches on via `instanceof`), and
  * {@link TransportError} for requests that never completed. `code` and `body`
  * still carry the API's own error vocabulary for finer-grained handling.
  */
 
-import type { ForgeErrorInit, HttpErrorInit } from "./types";
+import type { PressErrorInit, HttpErrorInit } from "./types";
 
-/** Root of the hierarchy: everything an openforge client throws extends this. */
-export class ForgeError extends Error {
+/** Root of the hierarchy: everything an openapi-press client throws extends this. */
+export class PressError extends Error {
   readonly method: string;
   readonly path: string;
 
-  constructor(init: ForgeErrorInit) {
+  constructor(init: PressErrorInit) {
     super(
       init.message,
       init.cause !== undefined ? { cause: init.cause } : undefined,
     );
-    this.name = "ForgeError";
+    this.name = "PressError";
     this.method = init.method;
     this.path = init.path;
   }
 }
 
 /** A response the server sent with a non-2xx status. */
-export class HttpError extends ForgeError {
+export class HttpError extends PressError {
   readonly status: number;
   readonly code: string;
   readonly body: unknown;
@@ -104,8 +104,8 @@ export class ServerError extends HttpError {
 }
 
 /** A request that never completed — no response, so no status. */
-export class TransportError extends ForgeError {
-  constructor(init: ForgeErrorInit) {
+export class TransportError extends PressError {
+  constructor(init: PressErrorInit) {
     super(init);
     this.name = "TransportError";
   }
@@ -113,7 +113,7 @@ export class TransportError extends ForgeError {
 
 /** The fetch itself failed (DNS, connection reset, offline). */
 export class NetworkError extends TransportError {
-  constructor(init: ForgeErrorInit) {
+  constructor(init: PressErrorInit) {
     super(init);
     this.name = "NetworkError";
   }
@@ -121,7 +121,7 @@ export class NetworkError extends TransportError {
 
 /** The caller cancelled the request via its abort signal. */
 export class AbortError extends TransportError {
-  constructor(init: ForgeErrorInit) {
+  constructor(init: PressErrorInit) {
     super(init);
     this.name = "AbortError";
   }
@@ -129,7 +129,7 @@ export class AbortError extends TransportError {
 
 /** The call was refused by an open circuit breaker — no request was attempted. */
 export class CircuitOpenError extends TransportError {
-  constructor(init: ForgeErrorInit) {
+  constructor(init: PressErrorInit) {
     super(init);
     this.name = "CircuitOpenError";
   }
@@ -137,7 +137,7 @@ export class CircuitOpenError extends TransportError {
 
 /** The call exceeded a configured time budget. */
 export class TimeoutError extends TransportError {
-  constructor(init: ForgeErrorInit) {
+  constructor(init: PressErrorInit) {
     super(init);
     this.name = "TimeoutError";
   }

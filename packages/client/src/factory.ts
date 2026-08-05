@@ -1,16 +1,16 @@
 /**
  * The wiring core. It owns an openapi-fetch client, fires observability hooks
- * and logs, normalizes every failure through `@openforge/error`, and binds
- * descriptor trees into trees of `@openforge/call` callables. Each transport
+ * and logs, normalizes every failure through `@openapi-press/error`, and binds
+ * descriptor trees into trees of `@openapi-press/call` callables. Each transport
  * call is a single attempt — behavior like retry composes above, through the
  * calls' `.with`. `makeClient` is the untyped implementation;
  * {@link defineClient} wraps it with the spec-derived types.
  */
 
-import { defineCall } from "@openforge/call";
-import type { ForgeError } from "@openforge/error";
-import { errorFromException, errorFromResponse } from "@openforge/error";
-import { extractParams, isOp } from "@openforge/spec";
+import { defineCall } from "@openapi-press/call";
+import type { PressError } from "@openapi-press/error";
+import { errorFromException, errorFromResponse } from "@openapi-press/error";
+import { extractParams, isOp } from "@openapi-press/spec";
 import createOpenapiClient from "openapi-fetch";
 import type { Middleware } from "openapi-fetch";
 
@@ -127,7 +127,7 @@ const execute = async (
   if (options.signal) init.signal = options.signal;
   if (options.headers) init.headers = options.headers;
 
-  let error: ForgeError;
+  let error: PressError;
   try {
     // `request` is the generic (method, url, init) form of the client.
     const result = await client.request(

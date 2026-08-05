@@ -10,12 +10,14 @@
     "noEmit": true,
     "types": ["node", "@nuxt/nitro-server"],
     "paths": {
-      "@openforge/nuxt/constant": ["./src/constant.ts"],
-      "@openforge/nuxt/types": ["./src/types.ts"],
-      "@openforge/nuxt/util": ["./src/util.ts"],
+      "@openapi-press/nuxt/constant": ["./src/constant.ts"],
+      "@openapi-press/nuxt/types": ["./src/types.ts"],
+      "@openapi-press/nuxt/util": ["./src/util.ts"],
       "#imports": ["./src/stubs/imports.d.ts"],
-      "#build/openforge.mjs": ["./src/stubs/build/openforge.d.mts"],
-      "#build/types/openforge": ["./src/stubs/build/types/openforge.d.ts"]
+      "#build/openapi-press.mjs": ["./src/stubs/build/openapi-press.d.mts"],
+      "#build/types/openapi-press": [
+        "./src/stubs/build/types/openapi-press.d.ts"
+      ]
     }
   },
   "include": ["src", "test"]

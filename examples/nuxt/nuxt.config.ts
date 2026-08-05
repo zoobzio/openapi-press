@@ -1,9 +1,9 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 /**
- * The openforge demo.
+ * The openapi-press demo.
  *
- * The SDK lives in `shared/api.ts` — a plain openforge Forge, default
+ * The SDK lives in `shared/api.ts` — a plain openapi-press Press, default
  * exported. The module registers it as the "api" client: SSR calls the host
  * directly, the browser calls the `/api/core` proxy. The upstream "API" is
  * this same app's nitro server under `/upstream`, so the whole round-trip is
@@ -11,8 +11,8 @@ import { defineNuxtConfig } from "nuxt/config";
  */
 export default defineNuxtConfig({
   compatibilityDate: "2026-08-01",
-  modules: ["@openforge/nuxt"],
-  openforge: {
+  modules: ["@openapi-press/nuxt"],
+  press: {
     clients: {
       api: {
         client: "~~/shared/api",

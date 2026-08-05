@@ -1,5 +1,5 @@
 /**
- * @openforge/spec — typed interactions with a generated OpenAPI `paths` type.
+ * @openapi-press/spec — typed interactions with a generated OpenAPI `paths` type.
  *
  * Everything here is derivable from a user's spec: operation resolution, the
  * `{param}` path grammar, request and response shapes, and branded operation

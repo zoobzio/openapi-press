@@ -1,4 +1,4 @@
-# @openforge/call
+# @openapi-press/call
 
 Instrumented callables for API clients.
 
@@ -30,13 +30,18 @@ Stateful wrappers keep their state in the factory's closure: one instance
 applied to several endpoints shares state across them (one circuit for the
 whole host); calling the factory per endpoint isolates it.
 
-Nothing is instrumented by default. openforge ships the vocabulary; the SDK
+Nothing is instrumented by default. openapi-press ships the vocabulary; the SDK
 author decides which endpoints carry which behavior.
 
 ## Usage
 
 ```ts
-import { withCache, withReauth, withRetry, withTimeout } from "@openforge/call";
+import {
+  withCache,
+  withReauth,
+  withRetry,
+  withTimeout,
+} from "@openapi-press/call";
 
 const retry = withRetry();
 const reauth = withReauth(() => tokenStore.refresh());
@@ -47,7 +52,7 @@ export const users = {
 };
 
 // Writing a wrapper of your own is just a function.
-import type { Wrapper } from "@openforge/call";
+import type { Wrapper } from "@openapi-press/call";
 
 const measure =
   (record: (ms: number) => void): Wrapper =>

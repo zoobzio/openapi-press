@@ -1,16 +1,16 @@
 import { describe, expectTypeOf, it } from "vitest";
 
 import type {
-  ForgeClientConfig,
+  PressClientConfig,
   HostPlane,
   MatchedClient,
-  NuxtOpenforgeConfig,
+  NuxtPressConfig,
   PrefixPlane,
 } from "../src/types";
 
-describe("ForgeClientConfig", () => {
+describe("PressClientConfig", () => {
   it("names the module, its upstream host, and its proxy prefix", () => {
-    expectTypeOf<ForgeClientConfig>().toEqualTypeOf<{
+    expectTypeOf<PressClientConfig>().toEqualTypeOf<{
       client: string;
       host: string;
       prefix: string;
@@ -18,10 +18,10 @@ describe("ForgeClientConfig", () => {
   });
 });
 
-describe("NuxtOpenforgeConfig", () => {
+describe("NuxtPressConfig", () => {
   it("carries an optional map of named clients", () => {
-    expectTypeOf<NuxtOpenforgeConfig["clients"]>().toEqualTypeOf<
-      Record<string, ForgeClientConfig> | undefined
+    expectTypeOf<NuxtPressConfig["clients"]>().toEqualTypeOf<
+      Record<string, PressClientConfig> | undefined
     >();
   });
 });

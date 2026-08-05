@@ -58,11 +58,11 @@ const options = {
 };
 
 const FAMILY = [
-  "openforge",
-  "@openforge/spec",
-  "@openforge/error",
-  "@openforge/call",
-  "@openforge/client",
+  "openapi-press",
+  "@openapi-press/spec",
+  "@openapi-press/error",
+  "@openapi-press/call",
+  "@openapi-press/client",
 ];
 
 const template = (
@@ -85,15 +85,15 @@ describe("module setup", () => {
   it("splits hosts (private) and prefixes (public) across the runtime-config planes", async () => {
     const nuxt = makeNuxt();
     await setup(options, nuxt);
-    expect(nuxt.options.runtimeConfig.openforge).toEqual({
+    expect(nuxt.options.runtimeConfig.press).toEqual({
       clients: { api: { host: "https://api.internal" } },
     });
-    expect(nuxt.options.runtimeConfig.public.openforge).toEqual({
+    expect(nuxt.options.runtimeConfig.public.press).toEqual({
       clients: { api: { prefix: "/api/core" } },
     });
   });
 
-  it("externalizes the openforge family on both server graphs", async () => {
+  it("externalizes the openapi-press family on both server graphs", async () => {
     const nuxt = makeNuxt();
     await setup(options, nuxt);
     expect(nuxt.options.vite.ssr?.external).toEqual(
@@ -128,10 +128,10 @@ describe("module setup", () => {
     });
   });
 
-  it("registers the useForge auto-import from the composable", async () => {
+  it("registers the usePress auto-import from the composable", async () => {
     await setup(options, makeNuxt());
     expect(kit.addImports).toHaveBeenCalledWith({
-      name: "useForge",
+      name: "usePress",
       from: "/resolved/runtime/composable",
     });
   });
@@ -141,26 +141,26 @@ describe("module setup", () => {
     const calls = kit.addTemplate.mock.calls.map(
       (call) => call[0] as { filename: string; getContents: () => string },
     );
-    const contents = template(calls, "openforge.mjs").getContents();
+    const contents = template(calls, "openapi-press.mjs").getContents();
     expect(contents).toContain('import c0 from "/app/shared/api.ts";');
     expect(contents).toContain('export const clients = { "api": c0 };');
 
-    const types = template(calls, "openforge.d.mts").getContents();
+    const types = template(calls, "openapi-press.d.mts").getContents();
     expect(types).toContain('import type c0 from "/app/shared/api";');
     expect(types).toContain('"api": typeof c0');
   });
 
-  it("writes the client-type manifest deriving ForgeClients from each factory", async () => {
+  it("writes the client-type manifest deriving PressClients from each factory", async () => {
     await setup(options, makeNuxt());
     const call = kit.addTypeTemplate.mock.calls[0]?.[0] as
       { filename: string; getContents: () => string } | undefined;
     if (!call) throw new Error("type template was not registered");
-    expect(call.filename).toBe("types/openforge.d.ts");
+    expect(call.filename).toBe("types/openapi-press.d.ts");
     const contents = call.getContents();
     expect(contents).toContain('import type c0 from "/app/shared/api";');
     expect(contents).toContain('"api": ReturnType<typeof c0>;');
     expect(contents).toContain(
-      "export type ForgeClientName = keyof ForgeClients;",
+      "export type PressClientName = keyof PressClients;",
     );
   });
 
@@ -168,7 +168,7 @@ describe("module setup", () => {
     const nuxt = makeNuxt();
     await setup({}, nuxt);
     expect(kit.addServerHandler).not.toHaveBeenCalled();
-    expect(nuxt.options.runtimeConfig.openforge).toEqual({ clients: {} });
+    expect(nuxt.options.runtimeConfig.press).toEqual({ clients: {} });
   });
 
   it("validates client config, rejecting a non-absolute host", async () => {

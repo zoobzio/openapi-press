@@ -2,22 +2,22 @@
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
   "changelog": [
     "@changesets/changelog-github",
-    { "repo": "zoobzio/openforge" }
+    { "repo": "zoobzio/openapi-press" }
   ],
   "commit": false,
   "access": "public",
   "baseBranch": "main",
   "fixed": [
     [
-      "openforge",
-      "@openforge/spec",
-      "@openforge/error",
-      "@openforge/call",
-      "@openforge/client",
-      "@openforge/nuxt"
+      "openapi-press",
+      "@openapi-press/spec",
+      "@openapi-press/error",
+      "@openapi-press/call",
+      "@openapi-press/client",
+      "@openapi-press/nuxt"
     ]
   ],
   "linked": [],
   "updateInternalDependencies": "patch",
-  "ignore": ["@openforge/example-nuxt"]
+  "ignore": ["@openapi-press/example-nuxt"]
 }

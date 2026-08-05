@@ -1,5 +1,5 @@
 {
-  "name": "@openforge/monorepo",
+  "name": "@openapi-press/monorepo",
   "license": "MIT",
   "private": true,
   "packageManager": "pnpm@10.27.0",

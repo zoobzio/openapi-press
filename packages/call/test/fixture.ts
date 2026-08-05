@@ -4,7 +4,7 @@
  * logs entry/exit so composition order is observable.
  */
 
-import { ServerError } from "@openforge/error";
+import { ServerError } from "@openapi-press/error";
 
 import type { CallMeta, Handler, Wrapper } from "../src/types";
 

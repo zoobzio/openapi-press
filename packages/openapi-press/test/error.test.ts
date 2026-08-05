@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import * as errors from "../src/error";
 
-describe("openforge/error", () => {
+describe("openapi-press/error", () => {
   it("exposes the hierarchy", () => {
-    expect(errors.ForgeError).toBeTypeOf("function");
+    expect(errors.PressError).toBeTypeOf("function");
     expect(errors.HttpError).toBeTypeOf("function");
     expect(errors.NotFoundError).toBeTypeOf("function");
     expect(errors.ServerError).toBeTypeOf("function");

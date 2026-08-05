@@ -50,15 +50,15 @@ importers:
 
   examples/nuxt:
     dependencies:
-      '@openforge/nuxt':
+      '@openapi-press/nuxt':
         specifier: workspace:*
         version: link:../../integrations/nuxt
       nuxt:
         specifier: ^4.4.6
         version: 4.5.1(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@oxc-project/types@0.142.0)(@types/node@25.9.5)(@vue/compiler-sfc@3.5.41)(db0@0.3.4)(esbuild@0.28.1)(eslint@10.8.0(jiti@2.7.0))(ioredis@5.11.1)(lightningcss@1.33.0)(magicast@0.5.4)(optionator@0.9.4)(rollup-plugin-visualizer@7.0.1(rolldown@1.2.2)(rollup@4.62.4))(rollup@4.62.4)(srvx@0.11.22)(terser@5.49.2)(typescript@6.0.3)(vite@8.2.0(@types/node@25.9.5)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.49.2)(yaml@2.9.0))(vue-tsc@3.3.9(typescript@6.0.3))(yaml@2.9.0)
-      openforge:
+      openapi-press:
         specifier: workspace:*
-        version: link:../../packages/openforge
+        version: link:../../packages/openapi-press
     devDependencies:
       vue-tsc:
         specifier: ^3.3.5
@@ -72,9 +72,9 @@ importers:
       h3:
         specifier: ^1.15.11
         version: 1.15.11
-      openforge:
+      openapi-press:
         specifier: workspace:*
-        version: link:../../packages/openforge
+        version: link:../../packages/openapi-press
     devDependencies:
       '@nuxt/nitro-server':
         specifier: ^4.4.6
@@ -91,19 +91,19 @@ importers:
 
   packages/call:
     dependencies:
-      '@openforge/error':
+      '@openapi-press/error':
         specifier: workspace:*
         version: link:../error
 
   packages/client:
     dependencies:
-      '@openforge/call':
+      '@openapi-press/call':
         specifier: workspace:*
         version: link:../call
-      '@openforge/error':
+      '@openapi-press/error':
         specifier: workspace:*
         version: link:../error
-      '@openforge/spec':
+      '@openapi-press/spec':
         specifier: workspace:*
         version: link:../spec
       openapi-fetch:
@@ -115,18 +115,18 @@ importers:
 
   packages/error: {}
 
-  packages/openforge:
+  packages/openapi-press:
     dependencies:
-      '@openforge/call':
+      '@openapi-press/call':
         specifier: workspace:*
         version: link:../call
-      '@openforge/client':
+      '@openapi-press/client':
         specifier: workspace:*
         version: link:../client
-      '@openforge/error':
+      '@openapi-press/error':
         specifier: workspace:*
         version: link:../error
-      '@openforge/spec':
+      '@openapi-press/spec':
         specifier: workspace:*
         version: link:../spec
 

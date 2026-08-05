@@ -1,7 +1,7 @@
-import { withRetry } from "@openforge/call";
-import type { Call } from "@openforge/call";
-import { NetworkError, NotFoundError, ServerError } from "@openforge/error";
-import { defineSpec } from "@openforge/spec";
+import { withRetry } from "@openapi-press/call";
+import type { Call } from "@openapi-press/call";
+import { NetworkError, NotFoundError, ServerError } from "@openapi-press/error";
+import { defineSpec } from "@openapi-press/spec";
 import { describe, expect, it } from "vitest";
 
 import { makeClient } from "../src/factory";

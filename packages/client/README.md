@@ -1,16 +1,16 @@
-# @openforge/client
+# @openapi-press/client
 
 The wiring layer that turns spec descriptors into live, typed API clients.
 
 ## The client model
 
-An openforge client is a nested namespace tree of `@openforge/spec`
+An openapi-press client is a nested namespace tree of `@openapi-press/spec`
 descriptors bound to a transport. `defineClient<paths>()` binds the generated
 spec type once; its `build(tree, config)` walks the tree, replacing each
-descriptor leaf with an `@openforge/call` callable whose signature is derived
+descriptor leaf with an `@openapi-press/call` callable whose signature is derived
 from the spec — positional path params, query/body optionality, and the
 success payload type. Errors are never returned: every failure throws from
-the `@openforge/error` hierarchy.
+the `@openapi-press/error` hierarchy.
 
 The client stays focused on wiring: each invocation is a single transport
 attempt, observed by the hooks. Behavior — retry, timeouts, whatever an SDK
@@ -25,12 +25,12 @@ wins on conflict.
 ## Usage
 
 ```ts
-import { defineForge } from "@openforge/client";
+import { definePress } from "@openapi-press/client";
 import type { paths } from "./schema.gen";
 
-const { op, client } = defineForge<paths>();
+const { op, client } = definePress<paths>();
 
-// A Forge: minimal config in, usable client out. Export it — apps and
+// A Press: minimal config in, usable client out. Export it — apps and
 // integrations decide the config; the SDK owns the shape.
 export const createApi = client({
   users: {
@@ -43,12 +43,12 @@ const api = createApi({ baseUrl: "https://api.example.com" });
 const user = await api.users.get("user-123");
 ```
 
-The lower-level pieces remain available when a Forge is not the right shape:
+The lower-level pieces remain available when a Press is not the right shape:
 `defineSpec` + `defineClient().build(tree, config)` compose the same client
 step by step, and endpoints can be instrumented per call site:
 
 ```ts
-import { withRetry, withTimeout } from "@openforge/call";
+import { withRetry, withTimeout } from "@openapi-press/call";
 
 const retry = withRetry();
 const getUser = api.users.get.with(retry, withTimeout(5000));
@@ -56,8 +56,8 @@ const getUser = api.users.get.with(retry, withTimeout(5000));
 
 ## API
 
-- `defineForge<Paths>()` — the authoring kit: `op` for spec-checked
-  descriptors, `client(tree)` to capture a tree into a `Forge<T>` — the
+- `definePress<Paths>()` — the authoring kit: `op` for spec-checked
+  descriptors, `client(tree)` to capture a tree into a `Press<T>` — the
   config-accepting client factory integrations consume.
 - `defineClient<Paths>()` — binds a generated `paths` type; returns a
   `ClientBuilder` whose `build(tree, config?)` turns a descriptor tree into a

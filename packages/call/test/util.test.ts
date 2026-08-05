@@ -5,7 +5,7 @@ import {
   RateLimitError,
   ServerError,
   TimeoutError,
-} from "@openforge/error";
+} from "@openapi-press/error";
 import { describe, expect, it } from "vitest";
 
 import { DEFAULT_RETRY } from "../src/constant";

@@ -3,8 +3,8 @@
  * client's environment config, and layering caller wiring over it.
  */
 
-import { KEY } from "@openforge/nuxt/constant";
-import type { ClientConfig } from "openforge";
+import { KEY } from "@openapi-press/nuxt/constant";
+import type { ClientConfig } from "openapi-press";
 
 import { useRequestHeaders, useRuntimeConfig } from "#imports";
 
@@ -14,7 +14,7 @@ export const resolveConfig = (name: string): ClientConfig => {
   const prefix = runtime.public[KEY]?.clients?.[name]?.prefix;
   if (prefix === undefined) {
     throw new Error(
-      `openforge: no client named "${name}" — configure it under \`${KEY}.clients\` in nuxt.config.`,
+      `openapi-press: no client named "${name}" — configure it under \`${KEY}.clients\` in nuxt.config.`,
     );
   }
 
@@ -22,7 +22,7 @@ export const resolveConfig = (name: string): ClientConfig => {
     const host = runtime[KEY]?.clients?.[name]?.host;
     if (host === undefined) {
       throw new Error(
-        `openforge: no upstream host for client "${name}" in server runtime config.`,
+        `openapi-press: no upstream host for client "${name}" in server runtime config.`,
       );
     }
     // Forward the caller's credentials so SSR requests act as the user.

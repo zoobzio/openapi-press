@@ -1,10 +1,10 @@
 {
-  "name": "@openforge/nuxt",
+  "name": "@openapi-press/nuxt",
   "version": "0.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoobzio/openforge.git",
+    "url": "git+https://github.com/zoobzio/openapi-press.git",
     "directory": "integrations/nuxt"
   },
   "type": "module",
@@ -45,7 +45,7 @@
   "dependencies": {
     "@nuxt/kit": "^4.4.6",
     "h3": "^1.15.11",
-    "openforge": "workspace:*"
+    "openapi-press": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/nitro-server": "^4.4.6",

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { defineOpenforgeConfig } from "../src/config";
+import { definePressConfig } from "../src/config";
 
-describe("defineOpenforgeConfig", () => {
+describe("definePressConfig", () => {
   it("returns the config it was given", () => {
     const config = {
       clients: {
@@ -13,6 +13,6 @@ describe("defineOpenforgeConfig", () => {
         },
       },
     };
-    expect(defineOpenforgeConfig(config)).toBe(config);
+    expect(definePressConfig(config)).toBe(config);
   });
 });

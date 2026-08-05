@@ -1,10 +1,10 @@
 {
-  "name": "@openforge/call",
+  "name": "@openapi-press/call",
   "version": "0.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoobzio/openforge.git",
+    "url": "git+https://github.com/zoobzio/openapi-press.git",
     "directory": "packages/call"
   },
   "type": "module",
@@ -27,6 +27,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@openforge/error": "workspace:*"
+    "@openapi-press/error": "workspace:*"
   }
 }

@@ -5,16 +5,16 @@
  */
 
 /** Where a named client lives, where it points, and where its proxy mounts. */
-export interface ForgeClientConfig {
+export interface PressClientConfig {
   /**
    * Resolution path to the module whose default export is the client's
-   * `Forge` factory. Aliases are allowed (`~/shared/api`).
+   * `Press` factory. Aliases are allowed (`~/shared/api`).
    */
   client: string;
   /**
    * Upstream origin requests are forwarded to. Server-only — it lands in
    * private runtime config and never ships to the browser. Overridable at
-   * deploy time via `NUXT_OPENFORGE_CLIENTS_<NAME>_HOST`.
+   * deploy time via `NUXT_PRESS_CLIENTS_<NAME>_HOST`.
    */
   host: string;
   /**
@@ -25,12 +25,12 @@ export interface ForgeClientConfig {
   prefix: string;
 }
 
-export interface NuxtOpenforgeConfig {
+export interface NuxtPressConfig {
   /**
-   * Named clients. The name is the handle `useForge(name, forge)` resolves
+   * Named clients. The name is the handle `usePress(name, press)` resolves
    * config by; each entry stands up its own proxy.
    */
-  clients?: Record<string, ForgeClientConfig>;
+  clients?: Record<string, PressClientConfig>;
 }
 
 /** A configured client a request path resolved to. */
