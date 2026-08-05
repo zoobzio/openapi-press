@@ -19,5 +19,5 @@
   ],
   "linked": [],
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": ["@openforge/example-nuxt"]
 }

@@ -1,0 +1,20 @@
+{
+  "name": "@openforge/example-nuxt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "nuxt prepare",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@openforge/nuxt": "workspace:*",
+    "nuxt": "^4.4.6",
+    "openforge": "workspace:*"
+  },
+  "devDependencies": {
+    "vue-tsc": "^3.3.5"
+  }
+}

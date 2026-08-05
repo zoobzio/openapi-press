@@ -49,6 +49,30 @@ const module: NuxtModule<NuxtOpenforgeConfig> =
       const resolver = createResolver(import.meta.url);
       const clients = normalizeClients(options.clients ?? {});
 
+      /*
+       * Every part of the server — user SDKs pulled in through the build
+       * manifest, the plugin, app code catching errors — must share one copy
+       * of the openforge modules, or `instanceof` breaks across the
+       * vite/nitro bundling boundary. Externalizing the family on the server
+       * side keeps it out of every bundle: both graphs resolve it at runtime
+       * through node's module cache, which is one copy by construction.
+       */
+      const family = [
+        "openforge",
+        "@openforge/spec",
+        "@openforge/error",
+        "@openforge/call",
+        "@openforge/client",
+      ];
+      nuxt.options.vite.ssr ||= {};
+      if (Array.isArray(nuxt.options.vite.ssr.external)) {
+        nuxt.options.vite.ssr.external.push(...family);
+      } else {
+        nuxt.options.vite.ssr.external = [...family];
+      }
+      nuxt.options.nitro.externals ||= {};
+      (nuxt.options.nitro.externals.external ||= []).push(...family);
+
       const entries: Entry[] = await Promise.all(
         Object.entries(clients).map(async ([name, client]) => {
           const path = await resolvePath(client.client, {

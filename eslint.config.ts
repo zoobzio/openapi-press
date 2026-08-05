@@ -7,7 +7,13 @@ export default tseslint.config(
   tseslint.configs.recommended,
   prettierPlugin,
   {
-    ignores: ["**/dist/", "**/.dist/", "**/.generated/"],
+    ignores: [
+      "**/dist/",
+      "**/.dist/",
+      "**/.generated/",
+      "**/.nuxt/",
+      "**/.output/",
+    ],
   },
   {
     rules: {

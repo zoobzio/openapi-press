@@ -31,7 +31,7 @@ jobs:
         with:
           name: dist
           include-hidden-files: true
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 1
           path: |
             packages/*/.dist
@@ -66,9 +66,9 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Download build output
         uses: actions/download-artifact@v4
-        continue-on-error: true
         with:
           name: dist
+      - run: pnpm -r prepare
       - run: pnpm typecheck
 
   # Only the tests exercise runtime behaviour, so they alone fan out across the
@@ -88,9 +88,9 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: Download build output
         uses: actions/download-artifact@v4
-        continue-on-error: true
         with:
           name: dist
+      - run: pnpm -r prepare
       - run: pnpm test
 
   # A single aggregated coverage pass on the pinned Node version — the matrix
@@ -106,7 +106,6 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Download build output
         uses: actions/download-artifact@v4
-        continue-on-error: true
         with:
           name: dist
       - run: pnpm coverage
