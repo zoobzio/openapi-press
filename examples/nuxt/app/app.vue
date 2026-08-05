@@ -2,11 +2,17 @@
 import { NotFoundError } from "openforge/error";
 
 /*
- * The registered client, fully typed from the Forge in shared/api.ts. On the
- * server this render calls the upstream host directly; in the browser the
- * same calls route through the /api/core proxy.
+ * The registered client, fully typed from the Forge in shared/api.ts, with
+ * app wiring supplied at the call site. On the server this render calls the
+ * upstream host directly; in the browser the same calls route through the
+ * /api/core proxy.
  */
-const api = useForge("api");
+const log = (message: string, meta?: Record<string, unknown>) => {
+  console.log(`[forge] ${message}`, meta ?? "");
+};
+const api = useForge("api", {
+  logger: { debug: log, info: log, warn: log, error: log },
+});
 
 const { data: users } = await useAsyncData("users", () =>
   api.users.list({ query: { limit: 10 } }),

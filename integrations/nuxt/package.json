@@ -47,6 +47,7 @@
     "openforge": "workspace:*"
   },
   "devDependencies": {
+    "@nuxt/nitro-server": "^4.4.6",
     "@nuxt/schema": "^4.4.6",
     "@types/node": "^25.9.1",
     "nuxt": "^4.4.6"

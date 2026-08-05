@@ -7,12 +7,11 @@ nuxt context, SSR-aware config, and a per-client API proxy.
 
 Each named client points at a module whose default export is a `Forge` — the
 config-accepting factory openforge produces. At build time the module
-resolves those paths and generates a registry: a manifest the plugin imports
-the factories through, and a type manifest deriving the name union and each
-client's type. The plugin builds every client with environment-appropriate
-config and provides the bundle on the nuxt app as `$forge`; `useForge(name)`
-is a typed lookup into it — names autocomplete, the client comes back fully
-typed, no casts. `nuxtApp.$forge.api` works directly too.
+resolves those paths and generates a registry: a manifest the composable
+imports the factories through, and a type manifest deriving the name union
+and each client's type. `useForge(name)` builds on demand with
+environment-appropriate config — names autocomplete, the client comes back
+fully typed, no casts. There is no plugin and nothing on the nuxt context.
 
 Config resolution is SSR-aware:
 
@@ -23,9 +22,7 @@ Client:  browser ──→ prefix (proxy) ──→ host
 
 `host` lives in private runtime config (env-overridable via
 `NUXT_OPENFORGE_CLIENTS_<NAME>_HOST`); the browser only ever sees `prefix`,
-where a catch-all proxy forwards to the host. Clients are built once per app
-instance — per browser session, per SSR request — so request-scoped headers
-never leak across requests.
+where a catch-all proxy forwards to the host.
 
 ## Usage
 
@@ -69,10 +66,25 @@ const { data } = await useAsyncData("user", () =>
 </script>
 ```
 
+App wiring — logger, hooks, `mapError`, anything from `ClientConfig` — is
+supplied at the call site and layered over the environment config (caller
+wins; headers merge, so SSR credential forwarding survives):
+
+```ts
+const api = useForge("api", { logger, hooks: { onError: report } });
+
+// Or as the app's own composable:
+export const useApi = () => useForge("api", { logger });
+```
+
+Every call builds a fresh client (builds are cheap — wrap in your own
+composable if sharing matters, e.g. for stateful `.with` wrappers).
+
 ## API
 
-- `useForge(name)` — auto-imported composable; returns the client from the
-  `$forge` bundle, typed via the generated registry.
+- `useForge(name, config?)` — auto-imported composable; builds the named
+  client with caller wiring layered over the environment config. Typed via
+  the generated registry.
 - `openforge.clients` (nuxt.config) —
   `Record<name, { client, host, prefix }>`: the Forge module path, the
   upstream origin, and the proxy mount.

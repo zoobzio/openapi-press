@@ -5,16 +5,14 @@
  * client in `openforge.clients` points at a module whose default export is a
  * `Forge` factory. Setup resolves those paths, splits host (private) and
  * prefix (public) across the runtime-config planes, mounts a proxy per
- * prefix, and writes the client registry into build templates: a manifest the
- * plugin imports the factories through, and a type manifest deriving the
- * name union, each client's type, and the `$name` context typing. The plugin
- * then builds every client and provides it on the nuxt app; `useForge(name)`
- * is a typed lookup.
+ * prefix, and writes the client registry into build templates: a manifest
+ * `useForge` imports the factories through, and a type manifest deriving the
+ * name union and each client's type. The composable builds on demand — there
+ * is no plugin and nothing on the nuxt context.
  */
 
 import {
   addImports,
-  addPlugin,
   addServerHandler,
   addTemplate,
   addTypeTemplate,
@@ -51,7 +49,7 @@ const module: NuxtModule<NuxtOpenforgeConfig> =
 
       /*
        * Every part of the server — user SDKs pulled in through the build
-       * manifest, the plugin, app code catching errors — must share one copy
+       * manifest, app code catching errors — must share one copy
        * of the openforge modules, or `instanceof` breaks across the
        * vite/nitro bundling boundary. Externalizing the family on the server
        * side keeps it out of every bundle: both graphs resolve it at runtime
@@ -116,7 +114,7 @@ const module: NuxtModule<NuxtOpenforgeConfig> =
       }
 
       /*
-       * The manifest: the plugin imports every Forge through this single
+       * The manifest: `useForge` imports every Forge through this single
        * module, so user clients stay app code compiled by the app bundler.
        */
       addTemplate({
@@ -150,8 +148,7 @@ const module: NuxtModule<NuxtOpenforgeConfig> =
 
       /*
        * The type manifest: each client's built type is derived from its
-       * Forge's return type, keyed by name for the composable and mirrored
-       * onto the nuxt app as `$name` for direct context access.
+       * Forge's return type, keyed by name for the composable's lookup.
        */
       addTypeTemplate({
         filename: "types/openforge.d.ts",
@@ -169,14 +166,10 @@ const module: NuxtModule<NuxtOpenforgeConfig> =
               )
               .join(" ")} }`,
             `export type ForgeClientName = keyof ForgeClients;`,
-            `declare module "#app" { interface NuxtApp { $forge: ForgeClients } }`,
-            `declare module "vue" { interface ComponentCustomProperties { $forge: ForgeClients } }`,
             `declare module "nuxt/schema" { interface RuntimeConfig { ${KEY}: { clients: Record<ForgeClientName, { host: string }> } } interface PublicRuntimeConfig { ${KEY}: { clients: Record<ForgeClientName, { prefix: string }> } } }`,
             `export {};`,
           ].join("\n"),
       });
-
-      addPlugin(resolver.resolve("./runtime/plugin"));
 
       addImports({
         name: "useForge",

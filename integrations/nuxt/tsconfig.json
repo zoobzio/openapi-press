@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["node"],
+    "types": ["node", "@nuxt/nitro-server"],
     "paths": {
       "@openforge/nuxt/constant": ["./src/constant.ts"],
       "@openforge/nuxt/types": ["./src/types.ts"],
