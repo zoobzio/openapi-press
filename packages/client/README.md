@@ -25,41 +25,40 @@ wins on conflict.
 ## Usage
 
 ```ts
-import { withRetry, withTimeout } from "@openforge/call";
-import { defineClient } from "@openforge/client";
-import type { ClientConfig } from "@openforge/client";
-import { defineSpec } from "@openforge/spec";
+import { defineForge } from "@openforge/client";
 import type { paths } from "./schema.gen";
 
-const { op } = defineSpec<paths>();
-const { build } = defineClient<paths>();
+const { op, client } = defineForge<paths>();
 
-export const createClient = (config?: ClientConfig) => {
-  const client = build(
-    {
-      users: {
-        list: op("get", "/users"),
-        get: op("get", "/users/{user_id}"),
-      },
-    },
-    config,
-  );
-  // The SDK author decides which endpoints carry which behavior.
-  const retry = withRetry();
-  return {
-    users: {
-      list: client.users.list.with(retry),
-      get: client.users.get.with(retry, withTimeout(5000)),
-    },
-  };
-};
+// A Forge: minimal config in, usable client out. Export it — apps and
+// integrations decide the config; the SDK owns the shape.
+export const createApi = client({
+  users: {
+    list: op("get", "/users"),
+    get: op("get", "/users/{user_id}"),
+  },
+});
 
-const client = createClient({ baseUrl: "https://api.example.com" });
-const user = await client.users.get("user-123");
+const api = createApi({ baseUrl: "https://api.example.com" });
+const user = await api.users.get("user-123");
+```
+
+The lower-level pieces remain available when a Forge is not the right shape:
+`defineSpec` + `defineClient().build(tree, config)` compose the same client
+step by step, and endpoints can be instrumented per call site:
+
+```ts
+import { withRetry, withTimeout } from "@openforge/call";
+
+const retry = withRetry();
+const getUser = api.users.get.with(retry, withTimeout(5000));
 ```
 
 ## API
 
+- `defineForge<Paths>()` — the authoring kit: `op` for spec-checked
+  descriptors, `client(tree)` to capture a tree into a `Forge<T>` — the
+  config-accepting client factory integrations consume.
 - `defineClient<Paths>()` — binds a generated `paths` type; returns a
   `ClientBuilder` whose `build(tree, config?)` turns a descriptor tree into a
   typed client.

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "@openforge/nuxt/constant": ["./src/constant.ts"],
+      "@openforge/nuxt/types": ["./src/types.ts"],
+      "@openforge/nuxt/util": ["./src/util.ts"],
+      "#imports": ["./src/stubs/imports.d.ts"],
+      "#build/openforge.mjs": ["./src/stubs/build/openforge.d.mts"],
+      "#build/types/openforge": ["./src/stubs/build/types/openforge.d.ts"]
+    }
+  },
+  "include": ["src", "test"]
+}

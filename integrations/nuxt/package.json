@@ -1,0 +1,54 @@
+{
+  "name": "@openforge/nuxt",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zoobzio/openforge.git",
+    "directory": "integrations/nuxt"
+  },
+  "type": "module",
+  "main": "./.dist/module.mjs",
+  "types": "./.dist/module.d.ts",
+  "exports": {
+    ".": {
+      "types": "./.dist/module.d.ts",
+      "import": "./.dist/module.mjs"
+    },
+    "./config": {
+      "types": "./.dist/config.d.ts",
+      "import": "./.dist/config.mjs"
+    },
+    "./constant": {
+      "types": "./.dist/constant.d.ts",
+      "import": "./.dist/constant.mjs"
+    },
+    "./types": {
+      "types": "./.dist/types.d.ts",
+      "import": "./.dist/types.mjs"
+    },
+    "./util": {
+      "types": "./.dist/util.d.ts",
+      "import": "./.dist/util.mjs"
+    }
+  },
+  "files": [
+    ".dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "stub": "unbuild --stub",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.4.6",
+    "h3": "^1.15.11",
+    "openforge": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/schema": "^4.4.6",
+    "@types/node": "^25.9.1",
+    "nuxt": "^4.4.6"
+  }
+}

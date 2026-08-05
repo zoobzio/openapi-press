@@ -18,6 +18,7 @@ import type {
   PathArgs,
   PathParamNames,
   PathParamObject,
+  SpecBuilder,
 } from "@openforge/spec";
 import type { HttpMethod, RequiredKeysOf } from "openapi-typescript-helpers";
 
@@ -142,4 +143,19 @@ export interface ClientBuilder<Paths extends object> {
     tree: Tree,
     config?: ClientConfig,
   ): Bound<Paths, Tree>;
+}
+
+/**
+ * A client factory: minimal config in, usable client out. The unit an SDK
+ * author exports and an integration consumes — the integration supplies the
+ * environment-appropriate config; the factory owns everything else.
+ */
+export type Forge<T> = (config?: ClientConfig) => T;
+
+/** The spec-bound authoring kit produced by {@link defineForge}. */
+export interface ForgeBuilder<Paths extends object> {
+  /** Spec-checked descriptor factory (see `defineSpec`). */
+  op: SpecBuilder<Paths>["op"];
+  /** Captures a namespace tree into a {@link Forge}. */
+  client<Tree extends object>(tree: Tree): Forge<Bound<Paths, Tree>>;
 }

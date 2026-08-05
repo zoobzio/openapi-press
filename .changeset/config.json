@@ -13,7 +13,8 @@
       "@openforge/spec",
       "@openforge/error",
       "@openforge/call",
-      "@openforge/client"
+      "@openforge/client",
+      "@openforge/nuxt"
     ]
   ],
   "linked": [],

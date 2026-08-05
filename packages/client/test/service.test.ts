@@ -1,9 +1,9 @@
-import { defineSpec } from "@openforge/spec";
+import { defineSpec, isOp } from "@openforge/spec";
 import type { Operation } from "@openforge/spec";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
-import { defineClient } from "../src/service";
-import type { CallOptions } from "../src/types";
+import { defineClient, defineForge } from "../src/service";
+import type { CallOptions, ClientConfig, Forge } from "../src/types";
 import { jsonResponse, makeFetch } from "./fixture";
 import type { User, paths } from "./fixture";
 
@@ -48,5 +48,49 @@ describe("defineClient", () => {
     expectTypeOf(client.users.get.with()).toEqualTypeOf<
       typeof client.users.get
     >();
+  });
+});
+
+describe("defineForge", () => {
+  const forge = defineForge<paths>();
+  const createApi = forge.client({
+    users: {
+      list: forge.op("get", "/users"),
+      get: forge.op("get", "/users/{user_id}"),
+    },
+  });
+
+  it("produces spec-checked descriptors through op", () => {
+    expect(isOp(forge.op("get", "/users"))).toBe(true);
+  });
+
+  it("captures a tree into a config-accepting factory", async () => {
+    const { fetch, requests } = makeFetch(() =>
+      jsonResponse(200, { id: "u1", name: "Ada" }),
+    );
+    const api = createApi({ baseUrl: "https://api.test", fetch });
+    await expect(api.users.get("u1")).resolves.toEqual({
+      id: "u1",
+      name: "Ada",
+    });
+    expect(requests[0]?.url).toBe("https://api.test/users/u1");
+  });
+
+  it("yields independent clients per config", async () => {
+    const a = makeFetch(() => jsonResponse(200, []));
+    const b = makeFetch(() => jsonResponse(200, []));
+    await createApi({ baseUrl: "https://a.test", fetch: a.fetch }).users.list();
+    await createApi({ baseUrl: "https://b.test", fetch: b.fetch }).users.list();
+    expect(a.requests[0]?.url).toBe("https://a.test/users");
+    expect(b.requests[0]?.url).toBe("https://b.test/users");
+  });
+
+  it("types the factory as a Forge over the bound tree", () => {
+    expectTypeOf(createApi).parameters.toEqualTypeOf<[config?: ClientConfig]>();
+    expectTypeOf(createApi).toMatchTypeOf<
+      Forge<ReturnType<typeof createApi>>
+    >();
+    const api = createApi();
+    expectTypeOf(api.users.list).returns.toEqualTypeOf<Promise<User[]>>();
   });
 });
