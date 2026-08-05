@@ -2,18 +2,100 @@
 
 A client-creation utility for resource-namespaced SDKs.
 
-Define a spec once, describe your API as a nested namespace tree of
-operations, and build a fully-typed client — path params become positional
-arguments, query and body optionality is inferred, and errors are normalized.
+Start from the types [openapi-typescript](https://openapi-ts.dev) generates
+for your API, describe the API as a nested namespace tree of operations, and
+get back a fully-typed client — path params become positional arguments,
+query and body optionality is inferred from the spec, and every failure
+throws from a granular, HTTP-aware error hierarchy. Behavior (retry,
+timeouts, caching, …) is opt-in per endpoint through a composable `.with`
+combinator; nothing is instrumented by default.
 
-> Early scaffolding — no packages published yet.
+> **Status:** early release. The API is usable but still settling — expect
+> breaking changes between 0.x versions.
 
-## Workspace
+## Quick start
 
-| Directory       | Purpose                                    |
-| --------------- | ------------------------------------------ |
-| `packages/`     | The openforge library packages             |
-| `integrations/` | Bridges to external tooling and frameworks |
+```sh
+npm install openforge
+npx openapi-typescript ./openapi.yaml -o ./schema.gen.ts
+```
+
+Describe the API once and export a **Forge** — a config-accepting client
+factory. The SDK owns the shape; whoever consumes it supplies the config:
+
+```ts
+// api.ts
+import { defineForge } from "openforge";
+import type { paths } from "./schema.gen";
+
+const { op, client } = defineForge<paths>();
+
+// Descriptors are checked against the spec: the path must exist and
+// carry the method.
+export const createApi = client({
+  users: {
+    list: op("get", "/users"),
+    get: op("get", "/users/{user_id}"),
+  },
+});
+```
+
+Build it and call it — signatures are derived from the spec:
+
+```ts
+import { NotFoundError } from "openforge/error";
+import { createApi } from "./api";
+
+const api = createApi({ baseUrl: "https://api.example.com" });
+
+const users = await api.users.list({ query: { limit: 20 } });
+
+try {
+  const user = await api.users.get("user-123");
+} catch (error) {
+  if (error instanceof NotFoundError) {
+    // branch on class, not `status === 404`
+  }
+}
+```
+
+Endpoints that need behavior get it explicitly, through `.with`:
+
+```ts
+import { withRetry, withTimeout } from "openforge";
+
+const retry = withRetry();
+const getUser = api.users.get.with(retry, withTimeout(5000));
+```
+
+Wrappers compose positionally and extending the vocabulary is just writing a
+function — see [`@openforge/call`](packages/call/README.md).
+
+## Packages
+
+The `openforge` umbrella re-exports the layers below; depend on it and the
+decomposition stays an implementation detail. Each package documents its own
+layer in depth.
+
+| Package                                          | Purpose                                                                       |
+| ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| [`openforge`](packages/openforge/README.md)      | Public umbrella — spec + call + client at the root, errors at `/error`        |
+| [`@openforge/spec`](packages/spec/README.md)     | Typed interactions with a generated OpenAPI `paths` type                      |
+| [`@openforge/error`](packages/error/README.md)   | Granular, HTTP-aware error hierarchy shared by every layer                    |
+| [`@openforge/call`](packages/call/README.md)     | Instrumented callables — the `.with` combinator and wrappers (retry, timeout) |
+| [`@openforge/client`](packages/client/README.md) | Wiring layer turning spec descriptors into live, typed API clients            |
+
+### Integrations
+
+| Package                                          | Purpose                                                             |
+| ------------------------------------------------ | ------------------------------------------------------------------- |
+| [`@openforge/nuxt`](integrations/nuxt/README.md) | SSR-aware `useForge` composable and a per-client API proxy for Nuxt |
+
+The Nuxt module registers Forges from `nuxt.config` and builds them with
+environment-appropriate config: SSR calls the upstream host directly (with
+credentials forwarded), the browser goes through a generated proxy so the
+host never reaches the client. A working end-to-end app lives in
+[`examples/nuxt`](examples/nuxt).
 
 ## Development
 

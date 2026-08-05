@@ -186,4 +186,24 @@ describe("makeClient", () => {
     const client = build({ fetch, mapError: () => undefined });
     await expect(client.users.list()).rejects.toBeInstanceOf(ServerError);
   });
+
+  it("forwards a per-call abort signal to the transport", async () => {
+    let aborted: boolean | undefined;
+    const fetch: typeof globalThis.fetch = async (input, init) => {
+      aborted = new Request(input, init).signal.aborted;
+      return jsonResponse(200, []);
+    };
+    const client = build({ fetch });
+    await client.users.list({ signal: AbortSignal.abort() });
+    expect(aborted).toBe(true);
+  });
+
+  it("skips tree values that are neither descriptors nor namespaces", () => {
+    const bound = makeClient(
+      { users: { list: op("get", "/users") }, version: "1.0" } as object,
+      { baseUrl: "https://api.test" },
+    ) as { users: { list: Fn }; version?: unknown };
+    expect(bound.users.list.meta).toEqual({ method: "get", path: "/users" });
+    expect("version" in bound).toBe(false);
+  });
 });

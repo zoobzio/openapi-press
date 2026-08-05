@@ -2,14 +2,20 @@ import { describe, expect, it } from "vitest";
 
 import {
   AbortError,
+  BadRequestError,
   CircuitOpenError,
+  ConflictError,
+  ForbiddenError,
   ForgeError,
   HttpError,
   NetworkError,
   NotFoundError,
+  RateLimitError,
   ServerError,
   TimeoutError,
   TransportError,
+  UnauthorizedError,
+  UnprocessableError,
 } from "../src/error";
 
 describe("ForgeError", () => {
@@ -90,5 +96,45 @@ describe("TransportError", () => {
       path: "/",
     });
     expect(error).not.toBeInstanceOf(HttpError);
+  });
+});
+
+describe("every status-specific HttpError subclass", () => {
+  const init = {
+    status: 400,
+    code: "HTTP_400",
+    message: "m",
+    method: "get",
+    path: "/",
+  };
+  it.each([
+    [BadRequestError, "BadRequestError"],
+    [UnauthorizedError, "UnauthorizedError"],
+    [ForbiddenError, "ForbiddenError"],
+    [NotFoundError, "NotFoundError"],
+    [ConflictError, "ConflictError"],
+    [UnprocessableError, "UnprocessableError"],
+    [RateLimitError, "RateLimitError"],
+    [ServerError, "ServerError"],
+  ] as const)("names itself and extends HttpError (%s)", (Cls, name) => {
+    const error = new Cls(init);
+    expect(error).toBeInstanceOf(HttpError);
+    expect(error).toBeInstanceOf(ForgeError);
+    expect(error.name).toBe(name);
+  });
+});
+
+describe("every TransportError subclass", () => {
+  const init = { message: "m", method: "get", path: "/" };
+  it.each([
+    [NetworkError, "NetworkError"],
+    [AbortError, "AbortError"],
+    [CircuitOpenError, "CircuitOpenError"],
+    [TimeoutError, "TimeoutError"],
+  ] as const)("names itself and extends TransportError (%s)", (Cls, name) => {
+    const error = new Cls(init);
+    expect(error).toBeInstanceOf(TransportError);
+    expect(error).toBeInstanceOf(ForgeError);
+    expect(error.name).toBe(name);
   });
 });

@@ -1,5 +1,6 @@
 {
   "name": "@openforge/monorepo",
+  "license": "MIT",
   "private": true,
   "packageManager": "pnpm@10.27.0",
   "scripts": {
