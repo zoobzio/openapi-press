@@ -1,5 +1,12 @@
 # @openapi-press/call
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @openapi-press/error@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
