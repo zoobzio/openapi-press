@@ -15,6 +15,16 @@ import type {
   SuccessResponse,
 } from "openapi-typescript-helpers";
 
+export type {
+  HttpMethod,
+  PathsWithMethod,
+  MediaType,
+  SuccessResponse,
+  ResponseObjectMap,
+  OperationRequestBodyContent,
+  IsOperationRequestBodyOptional,
+} from "openapi-typescript-helpers";
+
 /** A declarative endpoint reference: an HTTP method paired with a path template. */
 export interface OpDescriptor<
   M extends HttpMethod = HttpMethod,
